@@ -27,3 +27,26 @@
   <% end %>
 
 </table>
+
+<hr>
+
+<h2>
+  Room Information
+</h2>
+
+<table style="width:800px;text-align: center">
+  <tr>
+    <th>Room Number</th>
+    <th>Red Player Name</th>
+    <th>Blue Player Name</th>
+    <th>Room Status</th>
+  </tr>
+  <% @rooms.each do |room| %>
+  <tr>
+    <th><%= room.room_id %></th>
+    <th><%= room.red_player_name %></th>
+    <th><%= room.blue_player_name %></th>
+    <th><%= room.room_status %></th>
+  </tr>
+  <% end %>
+</table>

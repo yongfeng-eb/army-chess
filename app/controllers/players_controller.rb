@@ -11,6 +11,7 @@ class PlayersController < ApplicationController
     end
 
     @leader_board_lines = LeaderBoard.all
+    @rooms = Room.all
   end
 
   def create
