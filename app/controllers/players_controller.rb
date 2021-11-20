@@ -18,7 +18,7 @@ class PlayersController < ApplicationController
     @new_player = Player.create(user_id: @user_id, player_name: @player_name, password: @password)
   end
 
-  def sign_in
+  def sign_up
     @random_array = Array.new(10) { rand(1..9) }
     @user_id = @random_array.join('')
   end
