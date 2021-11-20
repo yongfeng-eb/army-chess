@@ -3,11 +3,14 @@ class PlayersController < ApplicationController
   end
 
   def home
-    @current_player = params[:user_id]
-    @player = Player.find_by(user_id: @current_player)
+    @current_player_id = params[:user_id]
+    @player = Player.find_by(user_id: @current_player_id)
+
     if @player.password != params[:password]
       render 'index'
     end
+
+    @leader_board_lines = LeaderBoard.all
   end
 
   def create

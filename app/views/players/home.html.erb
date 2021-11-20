@@ -1,0 +1,29 @@
+<h1>
+  player home page
+</h1>
+<hr>
+<h2>
+  Leader-Board Information
+</h2>
+
+<br>
+
+<table style="width:800px;text-align: center">
+  <tr>
+    <th>Name</th>
+    <th>Win Count</th>
+    <th>Lose Count</th>
+    <th>Total Count</th>
+    <th>Rank</th>
+  </tr>
+
+  <% @leader_board_lines.each do |line| %>
+    <tr>
+      <td><%= line.player_id %></td>
+      <td><%= line.win_count %></td>
+      <td><%= line.lose_count %></td>
+      <td><%= line.total_count %></td>
+    </tr>
+  <% end %>
+
+</table>

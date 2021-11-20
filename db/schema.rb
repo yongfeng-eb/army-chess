@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_20_095213) do
+ActiveRecord::Schema.define(version: 2021_11_20_095902) do
+
+  create_table "leader_boards", charset: "latin1", force: :cascade do |t|
+    t.bigint "player_id"
+    t.integer "win_count"
+    t.integer "lose_count"
+    t.integer "total_count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["player_id"], name: "index_leader_boards_on_player_id"
+  end
 
   create_table "players", charset: "latin1", force: :cascade do |t|
     t.string "user_id"

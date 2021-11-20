@@ -7,5 +7,15 @@ class CreatePlayers < ActiveRecord::Migration[6.1]
 
       t.timestamps
     end
+
+    create_table :leader_boards do |t|
+      t.belongs_to :player
+
+      t.integer :win_count
+      t.integer :lose_count
+      t.integer :total_count
+
+      t.timestamps
+    end
   end
 end
