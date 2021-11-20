@@ -1,3 +1,7 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root 'players#index'
+  get '/players', to: 'players#index'
+  post '/sign_in', to: 'players#sign_in'
+  post '/home', to: 'players#home'
+  post '/create', to: 'players#create'
 end
