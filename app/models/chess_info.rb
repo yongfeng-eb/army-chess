@@ -1,0 +1,2 @@
+class ChessInfo < ApplicationRecord
+end
