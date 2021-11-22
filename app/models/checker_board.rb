@@ -1,0 +1,2 @@
+class CheckerBoard < ApplicationRecord
+end

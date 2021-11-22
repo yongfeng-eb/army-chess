@@ -32,6 +32,7 @@
 
 <h2>
   Room Information
+  <%= button_tag 'Create Room', type: 'button' %>
 </h2>
 
 <table style="width:800px;text-align: center">
@@ -42,11 +43,16 @@
     <th>Room Status</th>
   </tr>
   <% @rooms.each do |room| %>
-  <tr>
-    <th><%= room.room_id %></th>
-    <th><%= room.red_player_name %></th>
-    <th><%= room.blue_player_name %></th>
-    <th><%= room.room_status %></th>
-  </tr>
+    <tr>
+      <td><%= room.room_id %></td>
+      <td><%= room.red_player_name %></td>
+      <td><%= room.blue_player_name %></td>
+
+      <% if room.room_status == false %>
+        <td><%= button_tag 'Is Playing', type: 'button', disabled: true %></td>
+      <% else %>
+        <td><%= button_tag 'Is Waiting', type: 'button' %></td>
+      <% end %>
+    </tr>
   <% end %>
 </table>

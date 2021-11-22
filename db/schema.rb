@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_20_111924) do
+ActiveRecord::Schema.define(version: 2021_11_21_130624) do
+
+  create_table "checker_boards", charset: "latin1", force: :cascade do |t|
+    t.integer "space_type"
+    t.string "space_name"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "chess_infos", charset: "latin1", force: :cascade do |t|
     t.string "chess_id"

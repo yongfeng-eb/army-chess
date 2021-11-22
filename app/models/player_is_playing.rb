@@ -1,0 +1,2 @@
+class PlayerIsPlaying < ApplicationRecord
+end

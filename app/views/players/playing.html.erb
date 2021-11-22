@@ -1,0 +1,21 @@
+<h1>
+  Checker Board Page
+</h1>
+
+<% @checker_board.each do |space| %>
+  <%= button_tag space.space_name, type: 'button' %>
+  <% @element_count_inline += 1 %>
+  <% @vertical_count += 1 %>
+  <% if @element_count_inline == 5 %>
+    <br>
+    <% @element_count_inline = 0 %>
+  <% end %>
+
+  <% if @vertical_count == 25 %>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  <% end %>
+<% end %>

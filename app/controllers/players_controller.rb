@@ -26,4 +26,10 @@ class PlayersController < ApplicationController
     @random_array = Array.new(10) { rand(1..9) }
     @user_id = @random_array.join('')
   end
+
+  def playing
+    @checker_board = CheckerBoard.all
+    @element_count_inline = 0
+    @vertical_count = 0
+  end
 end
