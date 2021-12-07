@@ -18,7 +18,16 @@ class CreatePlayers < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
+    create_table :preset_owners do |t|
+      t.belongs_to :players
+      t.integer :preset_id
+
+      t.timestamps
+    end
+
     create_table :player_is_playings do |t|
+      t.belongs_to :player
+
       t.boolean :player_status
 
       t.timestamps

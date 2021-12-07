@@ -29,11 +29,24 @@
 </table>
 
 <hr>
+<%= form_with url: '/place_chess' do |form| %>
+  <%= form.button 'Create Preset'%>
+
+  <%= form.hidden_field :string, name: 'user_id', value: @current_player_id %>
+  <%= form.hidden_field :string, name: 'first_access', value: 'first_access' %>
+<% end %>
+<hr>
 
 <h2>
   Room Information
-  <%= button_tag 'Create Room', type: 'button' %>
 </h2>
+
+<%= form_with url: '/create_room' do |form| %>
+  <%= form.button 'Create Room', value: @current_player_id, name: 'create_room_player_id' %>
+  <%= form.hidden_field :string, name: 'user_id', value: @current_player_id %>
+<% end %>
+
+<br>
 
 <table style="width:800px;text-align: center">
   <tr>
@@ -44,14 +57,23 @@
   </tr>
   <% @rooms.each do |room| %>
     <tr>
-      <td><%= room.room_id %></td>
-      <td><%= room.red_player_name %></td>
-      <td><%= room.blue_player_name %></td>
+      <%= form_with url: '/choose_preset' do |form| %>
+        <td><%= room.room_id %></td>
+        <td><%= room.red_player_name %></td>
+        <td><%= room.blue_player_name %></td>
 
-      <% if room.room_status == false %>
-        <td><%= button_tag 'Is Playing', type: 'button', disabled: true %></td>
-      <% else %>
-        <td><%= button_tag 'Is Waiting', type: 'button' %></td>
+        <% if room.room_status == false %>
+          <td><%= form.button 'Is Playing', disabled: true %></td>
+        <% else %>
+          <td>
+            <%= form.button 'Is Waiting', value: @current_player_id, name: 'join_room_player_id' %>
+
+            <%= form.hidden_field :string, value: room.room_id, name: 'room_id' %>
+            <%= form.hidden_field :string, value: 'blue_hand', name: 'which_hand' %>
+            <%= form.hidden_field :string, name: 'user_id', value: @current_player_id %>
+          </td>
+        <% end %>
+
       <% end %>
     </tr>
   <% end %>

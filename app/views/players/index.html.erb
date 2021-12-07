@@ -1,9 +1,15 @@
 <h1>Welcome to Army Chess</h1>
 
+<% flash.each do |type, msg| %>
+  <h2>
+    <%= msg %>
+  </h2>
+<% end %>
+
 <%= form_with url: '/home' do |form| %>
   <div>
     <%= form.label :user_id, 'Player_id: ' %>
-    <%= form.text_field :user_id %>
+    <%= form.text_field :user_id%>
   </div>
   <br>
   <div>

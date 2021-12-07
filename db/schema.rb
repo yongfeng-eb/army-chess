@@ -10,18 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_21_130624) do
+ActiveRecord::Schema.define(version: 2021_12_06_094242) do
 
-  create_table "checker_boards", charset: "latin1", force: :cascade do |t|
-    t.integer "space_type"
-    t.string "space_name"
-    t.integer "x_position"
-    t.integer "y_position"
+  create_table "all_chesses", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "chess_id"
+    t.string "chess_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "chess_infos", charset: "latin1", force: :cascade do |t|
+  create_table "blank_spaces", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "x_position"
+    t.integer "y_position"
+    t.string "position_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "chess_id"
+  end
+
+  create_table "chess_infos", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "chess_id"
     t.string "chess_name"
     t.integer "chess_priority"
@@ -39,10 +46,69 @@ ActiveRecord::Schema.define(version: 2021_11_21_130624) do
     t.index ["player_id"], name: "index_leader_boards_on_player_id"
   end
 
+  create_table "line_of_spaces", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "one_x_position"
+    t.integer "one_y_position"
+    t.integer "two_x_position"
+    t.integer "two_y_position"
+    t.boolean "is_connected"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "player_is_playings", charset: "latin1", force: :cascade do |t|
+    t.boolean "player_status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "players", charset: "latin1", force: :cascade do |t|
     t.string "user_id"
     t.string "player_name"
     t.string "password"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_playing"
+    t.boolean "is_login"
+  end
+
+  create_table "point_lines", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "point_id"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.string "near_point"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "preset_chess_infos", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "preset_owners_id"
+    t.string "chess_id"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.boolean "is_placed"
+    t.index ["preset_owners_id"], name: "index_preset_chess_infos_on_preset_owners_id"
+  end
+
+  create_table "preset_owners", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "players_id"
+    t.integer "preset_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["players_id"], name: "index_preset_owners_on_players_id"
+  end
+
+  create_table "realtime_infos", charset: "latin1", force: :cascade do |t|
+    t.integer "game_id"
+    t.string "chess_id"
+    t.integer "src_x_position"
+    t.integer "src_y_position"
+    t.integer "dst_x_position"
+    t.integer "dst_y_position"
+    t.string "position_type"
+    t.integer "which_hand"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -54,6 +120,9 @@ ActiveRecord::Schema.define(version: 2021_11_21_130624) do
     t.boolean "room_status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "next_turn"
   end
 
+  add_foreign_key "preset_chess_infos", "preset_owners", column: "preset_owners_id"
+  add_foreign_key "preset_owners", "players", column: "players_id"
 end

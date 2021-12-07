@@ -1,0 +1,23 @@
+<h1>
+  You're in the NO.<%= @room_id %> room. <%= @clicked_info %>
+</h1>
+<hr>
+
+<%= form_with url: '/playing', id: 'realtime_info_form' do |form| %>
+
+  <%= form.hidden_field :string, value: @room_id, name: 'room_id', id: 'room_id' %>
+  <%= form.hidden_field :string, value: @player_detail, name: 'player_detail', id: 'player_detail' %>
+  <%= form.hidden_field :string, value: @user_id, name: 'user_id' %>
+
+  <div id="realtime-container">
+    <%= render partial: "real_time/list", locals: {
+      realtime_info: @realtime_info,
+      element_count_inline: 0,
+      vertical_count: 0,
+      form: form }
+    %>
+  </div>
+
+<% end %>
+
+<%= javascript_pack_tag 'realtime_info' %>

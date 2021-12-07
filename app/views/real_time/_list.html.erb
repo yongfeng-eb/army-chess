@@ -1,0 +1,46 @@
+<%= form.hidden_field :string, name: 'first_clicked_chess', value: @first_clicked_chess %>
+
+<% realtime_info.each do |space| %>
+  <% if space.which_hand == 1 %>
+    <% if space.position_type == 'camp' %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'red_chess normal_chess camp_chess_flag', name: 'clicked_chess' %>
+    <% else %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'red_chess normal_chess', name: 'clicked_chess' %>
+    <% end %>
+
+  <% elsif space.which_hand == -1 %>
+    <% if space.position_type == 'camp' %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'normal_chess camp_chess camp_chess_flag', name: 'clicked_chess' %>
+    <% else %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'normal_chess', name: 'clicked_chess' %>
+    <% end %>
+
+  <% elsif space.which_hand == 0 %>
+    <% if space.position_type == 'camp' %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'blue_chess normal_chess camp_chess_flag', name: 'clicked_chess' %>
+    <% else %>
+      <%= form.button space.chess_id, value: space.dst_x_position.to_s + ',' + space.dst_y_position.to_s,
+                      class: 'blue_chess normal_chess', name: 'clicked_chess' %>
+    <% end %>
+
+  <% end %>
+
+  <% element_count_inline += 1 %>
+  <% if element_count_inline == 5 %>
+    <% vertical_count += 1 %>
+    <% if vertical_count == 6 %>
+      <br>
+      <br>
+      <br>
+    <% end %>
+    <br>
+    <br>
+    <% element_count_inline = 0 %>
+  <% end %>
+
+<% end %>

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  one_x_position: 1
+  one_y_position: 1
+  two_x_position: 1
+  two_y_position: 1
+  is_connected: false
+
+two:
+  one_x_position: 1
+  one_y_position: 1
+  two_x_position: 1
+  two_y_position: 1
+  is_connected: false

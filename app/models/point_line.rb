@@ -1,0 +1,2 @@
+class PointLine < ApplicationRecord
+end
