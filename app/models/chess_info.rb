@@ -5,6 +5,10 @@ class ChessInfo < ApplicationRecord
     chess.chess_priority
   end
 
+  def self.blank_priority
+    -1
+  end
+
   def self.bomb
     '10'
   end

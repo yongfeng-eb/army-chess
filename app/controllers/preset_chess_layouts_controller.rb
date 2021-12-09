@@ -1,13 +1,15 @@
 class PresetChessLayoutsController < ApplicationController
   def choose
     @room_id = params[:room_id]
-    @create_room_player_id = params[:create_room_player_id]
+    @create_room_player_id = params[:user_id]
     @join_room_player_id = params[:join_room_player_id]
 
     unless @join_room_player_id.nil?
       blue_player_name = Player.find_by(user_id: @join_room_player_id)
       current_room = Room.find_by(room_id: @room_id)
-      current_room.update(blue_player_name: blue_player_name.player_name, room_status: false)
+      current_room.update(blue_player_id: @join_room_player_id,
+                          blue_player_name: blue_player_name.player_name,
+                          room_status: false)
     end
 
     @which_hand = params[:which_hand]

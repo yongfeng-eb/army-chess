@@ -18,4 +18,14 @@ class Room < ApplicationRecord
     room = Room.find_by(room_id: room_id)
     room.update(next_turn: !room.next_turn)
   end
+
+  def self.game_over?(room_id)
+    room = Room.find_by(room_id: room_id)
+    room.is_game_over
+  end
+
+  def self.delete_one_room(room_id)
+    room = Room.find_by(room_id: room_id)
+    Room.delete(room.id)
+  end
 end

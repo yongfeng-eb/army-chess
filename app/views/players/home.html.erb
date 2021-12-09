@@ -30,7 +30,7 @@
 
 <hr>
 <%= form_with url: '/place_chess' do |form| %>
-  <%= form.button 'Create Preset'%>
+  <%= form.button 'Create Preset' %>
 
   <%= form.hidden_field :string, name: 'user_id', value: @current_player_id %>
   <%= form.hidden_field :string, name: 'first_access', value: 'first_access' %>
@@ -43,7 +43,7 @@
 
 <%= form_with url: '/create_room' do |form| %>
   <%= form.button 'Create Room', value: @current_player_id, name: 'create_room_player_id' %>
-  <%= form.hidden_field :string, name: 'user_id', value: @current_player_id %>
+  <%= form.hidden_field :string, value: @current_player_id, name: 'user_id' %>
 <% end %>
 
 <br>

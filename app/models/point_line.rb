@@ -1,2 +1,0 @@
-class PointLine < ApplicationRecord
-end

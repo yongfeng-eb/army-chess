@@ -11,6 +11,12 @@ class RealTimeController < ApplicationController
 
     @user_id = params[:user_id]
     @room_id = params[:room_id]
+
+
+    if Room.game_over?(@room_id)
+      redirect_to controller: :game_over, action: :index, user_id: @user_id
+    end
+
     @clicked_info = ''
     @clicked_value = params[:clicked_chess].to_s
     @first_clicked_chess = params[:first_clicked_chess]
@@ -27,11 +33,12 @@ class RealTimeController < ApplicationController
         if is_obey_rules != ''
           @clicked_info = is_obey_rules
           @first_clicked_chess = ''
-          # render_chess
+          render_chess
           render 'real_time/playing'
         else
           @first_clicked_chess = ''
-          move_chess(first_clicked_chess.id, second_clicked_chess.id)
+          move_chess_result = move_chess(first_clicked_chess.id, second_clicked_chess.id)
+          handle_move_chess_result(move_chess_result, @room_id)
           Room.update_next_turn(@room_id)
         end
       end
@@ -39,14 +46,37 @@ class RealTimeController < ApplicationController
     render_chess
   end
 
+  def handle_move_chess_result(result, room_id)
+    if result != ''
+      room = Room.find_by(room_id: room_id)
+      room.update(is_game_over: true)
+      win_player_id = if result == 1
+                        room.red_player_id
+                      else
+                        room.blue_player_id
+                      end
+      win_hand = if result == 1
+                   'red'
+                 else
+                   'blue'
+                 end
+      both_player_id = [room.red_player_id, room.blue_player_id]
+      both_player_id.delete(win_player_id)
+      redirect_to controller: :game_over, action: :index, user_id: win_player_id, win_player_id: win_player_id,
+                  fail_player_id: both_player_id[0], room_id: room_id, win_hand: win_hand
+    end
+  end
+
   def check_obey_rules(src_chess, dst_chess, move_flag)
     if src_chess.which_hand != move_flag && src_chess.chess_id != ChessInfo.blank_space
       return 'Please move your own chess.'
     end
     return "Can't eat your own chess." if src_chess.which_hand == dst_chess.which_hand
+    return "Can't move into camp occupied by other chess ." if dst_chess.position_type == 'camp' &&
+                                                               dst_chess.chess_id != ChessInfo.blank_space
 
-    # next_turn = Room.check_next_turn(@room_id, move_flag)
-    # return next_turn if next_turn != ''
+    next_turn = Room.check_next_turn(@room_id, move_flag)
+    return next_turn if next_turn != ''
 
     src_chess_id = src_chess.chess_id
     case src_chess_id
@@ -70,10 +100,10 @@ class RealTimeController < ApplicationController
     dst_x_position = dst_chess.dst_x_position
     dst_y_position = dst_chess.dst_y_position
 
-    if (dst_x_position - src_x_position).abs ** 2 + (dst_y_position - src_y_position).abs ** 2 <= 2
-      LineOfSpace.exist_line?(src_chess, dst_chess)
-    elsif src_position_type == 'railway_space' && dst_position_type == 'railway_space'
-      if dst_x_position == src_x_position
+    if src_position_type == 'railway_space' && dst_position_type == 'railway_space'
+      if src_chess.chess_id == ChessInfo.engineer
+        RealtimeInfo.engineer_rules(src_chess, dst_chess, @room_id.to_i)
+      elsif dst_x_position == src_x_position
         return "Can't step over chess." if RealtimeInfo.blank_in_y?(@room_id.to_i, src_y_position, dst_y_position,
                                                                     src_x_position) == false
 
@@ -83,11 +113,11 @@ class RealTimeController < ApplicationController
                                                                     src_y_position) == false
 
         ''
-      elsif src_chess.chess_id == ChessInfo.engineer
-        ''
       else
         "Can't move chess out of a line. (不能转弯)"
       end
+    elsif (dst_x_position - src_x_position).abs ** 2 + (dst_y_position - src_y_position).abs ** 2 <= 2
+      LineOfSpace.exist_line?(src_chess, dst_chess)
     else
       "Can't move over one step."
     end
@@ -103,15 +133,21 @@ class RealTimeController < ApplicationController
     when ''
       dst_chess.update(chess_id: ChessInfo.blank_space, which_hand: ChessInfo.blank_space_hand)
       src_chess.update(chess_id: ChessInfo.blank_space, which_hand: ChessInfo.blank_space_hand)
+      ''
     when 'src'
-      if dst_chess.chess_id != ChessInfo.ensign
-        dst_chess.update(chess_id: src_chess.chess_id, which_hand: src_chess.which_hand)
-        src_chess.update(which_hand: ChessInfo.blank_space_hand, chess_id: ChessInfo.blank_space)
+      tmp_dst_chess_id = dst_chess.chess_id
+      tmp_src_chess_hand = src_chess.which_hand
+      dst_chess.update(chess_id: src_chess.chess_id, which_hand: src_chess.which_hand)
+      src_chess.update(which_hand: ChessInfo.blank_space_hand, chess_id: ChessInfo.blank_space)
+
+      if tmp_dst_chess_id == ChessInfo.ensign
+        tmp_src_chess_hand
       else
-        '军旗所在大本营被占领'
+        ''
       end
     when 'dst'
       src_chess.update(chess_id: ChessInfo.blank_space, which_hand: ChessInfo.blank_space_hand)
+      ''
     end
   end
 end
@@ -121,8 +157,8 @@ def eat_rules(src, dst)
   dst_chess_priority = ChessInfo.get_chess_priority(dst)
 
   if (src_chess_priority == dst_chess_priority) ||
-     ((src_chess_priority == ChessInfo.bomb_priority || dst_chess_priority == ChessInfo.bomb_priority) &&
-       dst_chess_priority != ChessInfo.ensign_priority) ||
+     (((src_chess_priority == ChessInfo.bomb_priority && dst_chess_priority != ChessInfo.blank_priority) ||
+       dst_chess_priority == ChessInfo.bomb_priority) && dst_chess_priority != ChessInfo.ensign_priority) ||
      (src_chess_priority != ChessInfo.engineer_priority && dst_chess_priority == ChessInfo.landmine_priority)
     ''
   elsif src_chess_priority > dst_chess_priority

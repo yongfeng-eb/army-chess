@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'players#index'
 
-  get '/realtime_info', to: 'players#realtime'
+  get 'game_over', to: 'game_over#index'
   post '/prepared', to: 'preset_chess_layouts#prepared'
   get '/prepared', to: 'preset_chess_layouts#prepared'
   post '/choose_preset', to: 'preset_chess_layouts#choose'

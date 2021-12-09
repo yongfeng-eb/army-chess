@@ -12,9 +12,11 @@
 
     <%= form.hidden_field :string, name: 'room_id', value: @room_id %>
     <%= form.hidden_field :string, name: 'player_detail', value: @player_detail %>
-
-    <%= form.hidden_field :string, name: 'user_id', value: @create_room_player_id %>
-    <%= form.hidden_field :string, name: 'user_id', value: @join_room_player_id %>
+    <% if @create_room_player_id.nil? %>
+      <%= form.hidden_field :string, name: 'user_id', value: @join_room_player_id %>
+    <% else %>
+      <%= form.hidden_field :string, name: 'user_id', value: @create_room_player_id %>
+    <% end %>
   <% end %>
 
 <% else %>
@@ -23,18 +25,22 @@
     <% @own_preset_ids.each do |preset_id| %>
       <h1>
 
-      <%= preset_id %>
+        <%= preset_id %>
       </h1>
       <%= form.button preset_id, name: 'chosen_preset_id', value: preset_id %>
 
       <%= form.hidden_field :string, name: 'room_id', value: @room_id %>
       <%= form.hidden_field :string, name: 'player_detail', value: @player_detail %>
 
-      <%= form.hidden_field :string, name: 'user_id', value: @create_room_player_id %>
-      <%= form.hidden_field :string, name: 'user_id', value: @join_room_player_id %>
+      <% if @create_room_player_id.nil? %>
+        <%= form.hidden_field :string, name: 'user_id', value: @join_room_player_id %>
+      <% else %>
+        <%= form.hidden_field :string, name: 'user_id', value: @create_room_player_id %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
 <hr>
-which hand: <%= @which_hand %>
-player detail: <%= @player_detail %>
+<%= @create_room_player_id %>
+<hr>
+<%= @join_room_player_id %>

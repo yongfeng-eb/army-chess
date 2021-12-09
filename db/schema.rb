@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_06_094242) do
+ActiveRecord::Schema.define(version: 2021_12_08_011106) do
 
   create_table "all_chesses", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "chess_id"
@@ -32,6 +32,15 @@ ActiveRecord::Schema.define(version: 2021_12_06_094242) do
     t.string "chess_id"
     t.string "chess_name"
     t.integer "chess_priority"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "lattices", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "space_id"
+    t.integer "x_position"
+    t.integer "y_position"
+    t.string "near_lattice"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -70,15 +79,6 @@ ActiveRecord::Schema.define(version: 2021_12_06_094242) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "is_playing"
     t.boolean "is_login"
-  end
-
-  create_table "point_lines", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "point_id"
-    t.integer "x_position"
-    t.integer "y_position"
-    t.string "near_point"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "preset_chess_infos", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -121,6 +121,9 @@ ActiveRecord::Schema.define(version: 2021_12_06_094242) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "next_turn"
+    t.string "red_player_id"
+    t.string "blue_player_id"
+    t.boolean "is_game_over"
   end
 
   add_foreign_key "preset_chess_infos", "preset_owners", column: "preset_owners_id"
